@@ -1,0 +1,26 @@
+{
+  "name": "conmebol",
+  "version": "1.0.0",
+  "description": "CLI",
+  "main": "index.js",
+  "scripts": {},
+  "bin": {
+    "conmebol": "./Layer 0 - User Interface/lector.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "co": "^4.6.0",
+    "co-prompt": "^1.0.0",
+    "commander": "^2.9.0",
+    "q": "^1.4.1",
+    "requestify": "^0.2.3"
+  },
+  "devDependencies": {
+    "eslint": "^3.7.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1"
+  }
+}
