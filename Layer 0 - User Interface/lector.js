@@ -27,11 +27,13 @@ program
   .option('-n, --number [n]', 'number of times to simulate')
   .option('-c, --country [country]', 'country to qualify')
   .option('-r, --round [round]', 'round from which start to simulate the matches')
+  .option('-p, --position [position]', 'position from to which it has to get to qualify')
   .option('-m, --mode [mode]', 'mode to select match to pull down')
   .action((options) => {
     interpreter.simulteToQualify(options.number, options.country, {
       round: options.round,
       mode: options.mode,
+      position: options.position,
     });
   });
 

@@ -155,8 +155,12 @@ exports.playMissingMatches = function (state) {
 };
 
 
-exports.isQualified = function (state, country) {
-  for (let i = 0; i < 5; i++) {
+exports.isQualified = function (state, country, position) {
+  //  if position is not defined, then set it to 5
+  if (!position) {
+    position = 5;
+  }
+  for (let i = 0; i < position; i++) {
     if (state.table[i].name === country) {
       return true;
     }

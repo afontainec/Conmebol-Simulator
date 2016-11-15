@@ -76,6 +76,15 @@ function addStateToFinalState(finalState, state) {
   addMatchesToFinalState(finalState, state.matches);
 }
 
+function getMatchToPullDown(matches, mode) {
+  if (!mode || mode === 'least_likely') {
+    return matches[0];
+  } else if (mode === 'random') {
+    const r = Math.floor(Math.random() * matches.length);
+    return matches[r];
+  }
+}
+
 
 function initialize() {
   return new Promise((resolve) => {
@@ -98,10 +107,10 @@ exports.simulteToQualify = function (n, country, options) {
       let state = Logic.getInitalState(options.round);
       state = Logic.teamWinsEverything(country, state);
       state = Logic.playMissingMatches(state);
-      if (!Logic.isQualified(state, country)) {
+      if (!Logic.isQualified(state, country, options.position)) {
         // Printer.print(`El país ${country} no va a clasificar aunque gane todo`);
-        Printer.printHighlighted(`Escenarion en que ${country} se le es imposible clasificar:`);
-        Printer.printTableHighlighted(state);
+        // Printer.printHighlighted(`Escenarion en que ${country} se le es imposible clasificar:`);
+        // Printer.printTableHighlighted(state);
         unQualifiable++;
       } else {
         const matches = Logic.filterDownableMatches(state.matches, country);
@@ -113,7 +122,8 @@ exports.simulteToQualify = function (n, country, options) {
           });
 
           // get the match to pullDown
-          const match = matches[0];
+
+          const match = getMatchToPullDown(matches, options.mode);
           // pullDown will make if country won, then its a tie,
           // if it was a tie then country looses
           // and if country already looses it does nothing
@@ -121,7 +131,7 @@ exports.simulteToQualify = function (n, country, options) {
           state.table = Logic.sortTable(state.table);
 
           // check if it has become unqualified, therefor match is undownable.
-          if (!Logic.isQualified(state, country)) {
+          if (!Logic.isQualified(state, country, options.position)) {
             // Complete opposite of pullDown
             Logic.pushUp(state, match, country);
             match.status = 'undownable';
