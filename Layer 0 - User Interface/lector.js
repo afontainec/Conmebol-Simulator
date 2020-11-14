@@ -37,6 +37,16 @@ program
     });
   });
 
+program
+    .command('simulate')
+    .alias('s')
+    .description('get all the repositories of a particular organization')
+    .option('-n, --number [n]', 'number of times to simulate')
+    .option('-r, --round [round]', 'round from which start to simulate the matches')
+    .action((options) => {
+      interpreter.simulate(options.number, options.round);
+    });
+
 
 program
   .on('--help', () => {

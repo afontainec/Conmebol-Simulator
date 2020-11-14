@@ -154,7 +154,7 @@ exports.simulteToQualify = function (n, country, options) {
         addStateToFinalState(finalState, state);
       }
     }
-    divideTable(finalState.table, n);
+    divideTable(finalState.table, n - unQualifiable);
     finalState.table = Logic.sortTable(finalState.table);
 
     Printer.printHighlighted(`En ${unQualifiable} (${(unQualifiable / n) * 100}%) escenarios se hizo imposible para que ${country} clasificara`);
@@ -164,6 +164,37 @@ exports.simulteToQualify = function (n, country, options) {
     Printer.printTableHighlighted(finalState);
     Printer.printHighlighted(`Los Partidos de ${country}:`);
     Printer.printMatchesOfHighlighted(finalState, country);
+  }).catch((err) => {
+    console.log('hubo un error');
+    Printer.print(err);
+  });
+};
+
+exports.simulate = function (n, round) {
+  initialize().then(() => {
+    if (!n) {
+      n = 1;
+    }
+
+    // if (!round) {
+    //   round = 20;
+    // }
+
+    const finalState = {};
+    Printer.printHighlighted('La tabla actual es: ');
+    Printer.printTableHighlighted(Logic.getInitalState(round));
+    for (let i = 0; i < n; i++) {
+      let state = Logic.getInitalState(round);
+      state = Logic.playMissingMatches(state);
+      addStateToFinalState(finalState, state);
+    }
+    divideTable(finalState.table, n);
+    finalState.table = Logic.sortTable(finalState.table);
+
+    Printer.printHighlighted('Todos los partidos:');
+    Printer.printAllMatchesOfHighlighted(finalState);
+    Printer.printHighlighted('Tabla:');
+    Printer.printTableHighlighted(finalState);
   }).catch((err) => {
     console.log('hubo un error');
     Printer.print(err);
