@@ -50,3 +50,7 @@ stdin.addListener('data', (d) => {
 });
 
 console.log('Ingrese una probabilidad en el siguiente formato: Local #victorias Visita #victorias Empates #empates');
+
+
+module.exports = { addOdd };
+
