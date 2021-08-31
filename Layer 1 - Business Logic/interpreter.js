@@ -106,7 +106,7 @@ exports.simulteToQualify = function (n, country, options) {
     for (let i = 0; i < n; i++) {
       let state = Logic.getInitalState(options.round);
       state = Logic.teamWinsEverything(country, state);
-      state = Logic.playMissingMatches(state);
+      state = Logic.playMissingMatches(state, options.fixedMatch);
       if (!Logic.isQualified(state, country, options.position)) {
         // Printer.print(`El país ${country} no va a clasificar aunque gane todo`);
         // Printer.printHighlighted(`Escenarion en que ${country} se le es imposible clasificar:`);
@@ -170,7 +170,7 @@ exports.simulteToQualify = function (n, country, options) {
   });
 };
 
-exports.simulate = function (n, round) {
+exports.simulate = function (n, round, fixedMatch) {
   initialize().then(() => {
     if (!n) {
       n = 1;
@@ -185,7 +185,7 @@ exports.simulate = function (n, round) {
     Printer.printTableHighlighted(Logic.getInitalState(round));
     for (let i = 0; i < n; i++) {
       let state = Logic.getInitalState(round);
-      state = Logic.playMissingMatches(state);
+      state = Logic.playMissingMatches(state, fixedMatch);
       addStateToFinalState(finalState, state);
     }
     divideTable(finalState.table, n);
@@ -200,3 +200,11 @@ exports.simulate = function (n, round) {
     Printer.print(err);
   });
 };
+
+
+exports.readFixedMatch = function (input) {
+  if (!input) return null;
+  const [local, localGoals, visit, visitGoals] = input.split(' ');
+  return { local, localGoals, visit, visitGoals };
+};
+

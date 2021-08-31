@@ -29,11 +29,14 @@ program
   .option('-r, --round [round]', 'round from which start to simulate the matches')
   .option('-p, --position [position]', 'position from to which it has to get to qualify')
   .option('-m, --mode [mode]', 'mode to select match to pull down')
+  .option('-f, --fix [fix]', 'set the result for a match in the format "local localGolas visit visitGoals"')
   .action((options) => {
+    const fixedMatch = interpreter.readFixedMatch(options.fix);
     interpreter.simulteToQualify(options.number, options.country, {
       round: options.round,
       mode: options.mode,
       position: options.position,
+      fixedMatch,
     });
   });
 
@@ -43,8 +46,10 @@ program
     .description('get all the repositories of a particular organization')
     .option('-n, --number [n]', 'number of times to simulate')
     .option('-r, --round [round]', 'round from which start to simulate the matches')
+    .option('-f, --fix [fix]', 'set the result for a match in the format "local localGolas visit visitGoals"')
     .action((options) => {
-      interpreter.simulate(options.number, options.round);
+      const fixedMatch = interpreter.readFixedMatch(options.fix);
+      interpreter.simulate(options.number, options.round, fixedMatch);
     });
 
 
@@ -67,3 +72,4 @@ program
   });
 
 program.parse(process.argv);
+

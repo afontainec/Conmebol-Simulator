@@ -114,9 +114,22 @@ exports.teamWinsEverything = function (country, state) {
   return state;
 };
 
+const isFixedMatch = (local, visit, fixedMatch) => {
+  if (!fixedMatch) return false;
+  return fixedMatch.local === local && fixedMatch.visit === visit;
+};
 
-function simulate(state, local, visit, lIndex, vIndex) {
+const registerFixedMatch = (state, lIndex, vIndex, fixedMatch) => {
+  const match = createAndAddMatch(fixedMatch.local, fixedMatch.visit, fixedMatch.localGoals, fixedMatch.visitGoals, 'fixed');
+  addPoints(state, match, lIndex, vIndex);
+  state.matches.push(match);
+};
+
+function simulate(state, local, visit, lIndex, vIndex, fixedMatch) {
   const odds = oddProvider.getOdds(local, visit);
+  if (isFixedMatch(local, visit, fixedMatch)) {
+    return registerFixedMatch(state, lIndex, vIndex, fixedMatch);
+  }
   const rand = Math.random();
   const status = 'simulated';
   const winnerGoals = 2;
@@ -137,14 +150,15 @@ function simulate(state, local, visit, lIndex, vIndex) {
   }
 }
 
-exports.playMissingMatches = function (state) {
+
+exports.playMissingMatches = function (state, fixed) {
   for (let i = 0; i < state.table.length; i++) {
     const local = state.table[i].name;
     for (let j = 0; j < state.table.length; j++) {
       const visit = state.table[j].name;
       if (local !== visit) {
         if (!matchPlayed(state.matches, local, visit)) {
-          simulate(state, local, visit, i, j);
+          simulate(state, local, visit, i, j, fixed);
         }
       }
     }
